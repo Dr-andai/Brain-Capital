@@ -7,24 +7,44 @@ let markersLayer = null;
  * Initialize the Leaflet map
  */
 function initMap() {
-    if (map) {
-        map.remove();
+    // Check if map element exists
+    const mapElement = document.getElementById('map');
+    if (!mapElement) {
+        console.error('Map element not found');
+        return;
     }
 
-    // Create map
-    map = L.map('map').setView([20, 0], 2);
+    // Remove old map if it exists
+    if (map) {
+        try {
+            map.remove();
+            map = null;
+            markersLayer = null;
+        } catch (e) {
+            console.warn('Error removing old map:', e);
+            map = null;
+            markersLayer = null;
+        }
+    }
 
-    // Add tile layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        maxZoom: 19,
-    }).addTo(map);
+    // Create new map
+    try {
+        map = L.map('map').setView([20, 0], 2);
 
-    // Create markers layer
-    markersLayer = L.layerGroup().addTo(map);
+        // Add tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 19,
+        }).addTo(map);
 
-    // Load initial data
-    updateMapData();
+        // Create markers layer
+        markersLayer = L.layerGroup().addTo(map);
+
+        // Load initial data
+        updateMapData();
+    } catch (e) {
+        console.error('Error initializing map:', e);
+    }
 }
 
 /**
@@ -114,13 +134,21 @@ function updateMapData() {
 /**
  * Listen for htmx events to update map
  */
-document.body.addEventListener('htmx:afterSettle', (event) => {
+document.body.addEventListener('htmx:afterSwap', (event) => {
     if (event.detail.target.id === 'map-container') {
         console.log('Map container updated, refreshing map data');
         // Reinitialize map after content swap
         setTimeout(() => {
             initMap();
-        }, 100);
+        }, 200);
+    }
+});
+
+// Also listen for htmx errors
+document.body.addEventListener('htmx:responseError', (event) => {
+    console.error('htmx error:', event.detail);
+    if (event.detail.target.id === 'map-container') {
+        alert('An error occurred while loading data. Please try again.');
     }
 });
 

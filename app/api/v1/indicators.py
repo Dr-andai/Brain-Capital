@@ -64,22 +64,7 @@ async def list_indicators(
     return service.get_all_active_indicators()
 
 
-@router.get("/indicators/{indicator_id}", response_model=Indicator)
-async def get_indicator(
-    indicator_id: int,
-    service: IndicatorService = Depends(get_indicator_service),
-):
-    """Get indicator by ID."""
-    indicator = service.get_indicator_by_id(indicator_id)
-    if not indicator:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Indicator with ID {indicator_id} not found",
-        )
-    return indicator
-
-
-# Indicator values with filtering
+# Indicator values with filtering (must come before /indicators/{indicator_id})
 @router.get("/indicators/values")
 async def get_indicator_values(
     pillar_id: int | None = Query(None),
@@ -112,6 +97,21 @@ async def get_indicator_values(
         "total": total,
         "filters": filters.model_dump(),
     }
+
+
+@router.get("/indicators/{indicator_id}", response_model=Indicator)
+async def get_indicator(
+    indicator_id: int,
+    service: IndicatorService = Depends(get_indicator_service),
+):
+    """Get indicator by ID."""
+    indicator = service.get_indicator_by_id(indicator_id)
+    if not indicator:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Indicator with ID {indicator_id} not found",
+        )
+    return indicator
 
 
 # Map data endpoint

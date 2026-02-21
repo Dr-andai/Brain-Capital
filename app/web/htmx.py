@@ -46,8 +46,15 @@ async def get_indicators(
     service = IndicatorService(db)
     indicators = service.get_indicators_by_dimension(dimension_id)
 
-    # Return just the select element
-    html = '<select id="indicator-select" name="indicator_id">'
+    # Return just the select element with htmx attributes
+    html = '''<select id="indicator-select"
+                      name="indicator_id"
+                      hx-get="/htmx/filter-results"
+                      hx-target="#map-container"
+                      hx-trigger="change"
+                      hx-include="[name='year']"
+                      hx-push-url="true"
+                      hx-indicator="#loading-indicator">'''
     html += '<option value="">All Indicators</option>'
     for indicator in indicators:
         html += f'<option value="{indicator.id}">{indicator.name}</option>'
