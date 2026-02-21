@@ -1,0 +1,39 @@
+<div class="insight-result">
+    <div class="insight-header">
+        <span class="insight-type">{{ insight.insight_type | title }}</span>
+        {% if insight.confidence_score %}
+        <span class="confidence-score">
+            Confidence: {{ (insight.confidence_score * 100) | round(0) | int }}%
+        </span>
+        {% endif %}
+    </div>
+
+    <div class="insight-text">
+        {{ insight.insight_text }}
+    </div>
+
+    <div class="insight-meta">
+        <small>Generated: {{ insight.generated_at.strftime('%Y-%m-%d %H:%M UTC') }}</small>
+        {% if insight.model_version %}
+        <small>Model: {{ insight.model_version }}</small>
+        {% endif %}
+    </div>
+
+    <div class="insight-feedback">
+        <p>Was this insight helpful?</p>
+        <button
+            hx-post="/htmx/insights/{{ insight.id }}/feedback"
+            hx-vals='{"rating": 5}'
+            hx-swap="none"
+            class="btn-feedback">
+            👍 Helpful
+        </button>
+        <button
+            hx-post="/htmx/insights/{{ insight.id }}/feedback"
+            hx-vals='{"rating": 1}'
+            hx-swap="none"
+            class="btn-feedback">
+            👎 Not Helpful
+        </button>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+<div class="insight-panel">
+    <h3>AI Insights</h3>
+    <p class="insight-description">
+        Get AI-generated insights based on your current filter selection.
+    </p>
+
+    <button
+        hx-post="/htmx/insights/generate"
+        hx-target="#insight-content"
+        hx-vals='js:getFilterValues()'
+        hx-indicator="#insight-spinner"
+        class="btn-primary">
+        Generate Insight
+    </button>
+
+    <div id="insight-spinner" class="htmx-indicator">
+        <div class="spinner"></div>
+        <span>Generating insight...</span>
+    </div>
+
+    <div id="insight-content" class="insight-content">
+        <p class="insight-placeholder">
+            Select filters and click "Generate Insight" to get AI-powered analysis of the selected data.
+        </p>
+    </div>
+</div>

@@ -1,0 +1,80 @@
+<div class="filters-container">
+    <h3>Filter Data</h3>
+
+    <form id="filter-form"
+          hx-get="/htmx/filter-results"
+          hx-target="#map-container"
+          hx-trigger="change"
+          hx-push-url="true"
+          hx-indicator="#loading-indicator">
+
+        <!-- Pillar Filter -->
+        <div class="filter-group">
+            <label for="pillar-select">Pillar</label>
+            <select id="pillar-select"
+                    name="pillar_id"
+                    hx-get="/htmx/dimensions"
+                    hx-target="#dimension-select-container"
+                    hx-trigger="change">
+                <option value="">All Pillars</option>
+                {% for pillar in pillars %}
+                <option value="{{ pillar.id }}">{{ pillar.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Dimension Filter (dynamically populated) -->
+        <div class="filter-group">
+            <label for="dimension-select">Dimension</label>
+            <div id="dimension-select-container">
+                <select id="dimension-select"
+                        name="dimension_id"
+                        hx-get="/htmx/indicators"
+                        hx-target="#indicator-select-container"
+                        hx-trigger="change">
+                    <option value="">All Dimensions</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Indicator Filter (dynamically populated) -->
+        <div class="filter-group">
+            <label for="indicator-select">Indicator</label>
+            <div id="indicator-select-container">
+                <select id="indicator-select" name="indicator_id">
+                    <option value="">All Indicators</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Year Filter -->
+        <div class="filter-group">
+            <label for="year-select">Year</label>
+            <select id="year-select" name="year">
+                <option value="2023" selected>2023</option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+                <option value="2020">2020</option>
+            </select>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loading-indicator" class="loading-indicator htmx-indicator">
+            <div class="spinner"></div>
+            <span>Loading data...</span>
+        </div>
+
+        <!-- Reset Button -->
+        <button type="button" onclick="resetFilters()" class="btn-secondary">
+            Reset Filters
+        </button>
+    </form>
+
+    <!-- Statistics -->
+    <div class="filter-stats">
+        <h4>Current Selection</h4>
+        <div id="filter-stats-content">
+            <p>Select filters to view data</p>
+        </div>
+    </div>
+</div>

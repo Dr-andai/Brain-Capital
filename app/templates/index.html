@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Brain Capital Intelligence Platform - Home{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Hero Section -->
+    <section class="hero">
+        <h2>Visualize Global Brain Capital</h2>
+        <p>Explore country-level indicators across Brain Health, Brain Skills, and Brain Capital Drivers with AI-powered insights.</p>
+    </section>
+
+    <!-- Filters and Map Section -->
+    <div class="dashboard">
+        <!-- Filters Sidebar -->
+        <aside class="filters-sidebar">
+            {% include "components/filters.html" %}
+        </aside>
+
+        <!-- Map and Content -->
+        <div class="main-content">
+            <!-- Map Container -->
+            <div id="map-container">
+                {% include "components/map_container.html" %}
+            </div>
+
+            <!-- Insight Panel -->
+            <div class="insight-section">
+                {% include "components/insight_panel.html" %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', path='/js/map.js') }}"></script>
+<script src="{{ url_for('static', path='/js/filters.js') }}"></script>
+{% endblock %}

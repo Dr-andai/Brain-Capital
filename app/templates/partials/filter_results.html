@@ -1,0 +1,38 @@
+<!-- Updated map container after filter change -->
+<div class="map-wrapper">
+    <h3>Global Brain Capital Map{% if indicator_name %} - {{ indicator_name }}{% endif %}</h3>
+
+    <!-- Map (will be updated by JavaScript) -->
+    <div id="map" style="height: 600px; width: 100%;"></div>
+
+    <!-- Map Legend -->
+    <div class="map-legend">
+        <h4>Legend</h4>
+        <div class="legend-items">
+            <div class="legend-item">
+                <span class="legend-color" style="background: #2ecc71;"></span>
+                <span>High (75-100)</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color" style="background: #f39c12;"></span>
+                <span>Medium (50-75)</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color" style="background: #e74c3c;"></span>
+                <span>Low (0-50)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Stats -->
+    {% if total %}
+    <div class="data-stats">
+        <p>Showing {{ total }} data points</p>
+    </div>
+    {% endif %}
+
+    <!-- Hidden data container -->
+    <script id="map-data" type="application/json">
+        {{ map_data | tojson | safe }}
+    </script>
+</div>
